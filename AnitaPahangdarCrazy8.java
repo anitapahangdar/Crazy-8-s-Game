@@ -84,7 +84,7 @@ public class AnitaPahangdarCrazy8 {
                 //close the reader
                 reader.close();
                 // Compare stored password with entered password
-                return storedPassword.equals(password);
+                return storedPassword != null && storedPassword.equals(password);
             }
         }
         reader.close();
@@ -168,9 +168,11 @@ public class AnitaPahangdarCrazy8 {
 	public static void main(String[] args) throws Exception {
 		//declaring the scanner
 		Scanner sc = new Scanner(System.in);
-		//creating a file instance and scanner for the file
+		//Create the local account data file on first run. It is excluded from Git.
 		File file = new File("information.txt");
-		Scanner input = new Scanner(file);
+		if (!file.exists()) {
+			file.createNewFile();
+		}
 		 
 		//declaring the arrays for the deck of cards, computer's hand and user's hand 
 		String[] deck = new String[52];
@@ -240,37 +242,32 @@ public class AnitaPahangdarCrazy8 {
 		System.out.println("WELCOME!!");
 		
 		//asking if the user has an account or they have to make an account
-		System.out.print("Do you have an acocunt?(y/n) ");
+		System.out.print("Do you have an account? (y/n): ");
 		String account = sc.nextLine();
 		
-		//checking for the user's input validtion
-		while (!account.equals("y") && !account.equals("n")) {
+		//Keep prompting until the user enters a supported option.
+		while (!account.equalsIgnoreCase("y") && !account.equalsIgnoreCase("n")) {
 			System.out.println("Invalid input. Please try again.");
-			System.out.print("Do you have an acocunt?(y/n) ");
-			if (sc.hasNextInt()) {
-				account = sc.nextLine();
-	        } 
-			else {
-	            sc.next(); //consume the invalid input
-	        }
+			System.out.print("Do you have an account? (y/n): ");
+			account = sc.nextLine().trim();
 		}
 			
 		//login if they already have an account
-		if(account.equals("y")) {
+		if(account.equalsIgnoreCase("y")) {
 			//getting the username and password 
 			System.out.println("↪ Please enter username and password to log into your account ");
-			System.out.print("Username(testrun): ");
+			System.out.print("Username: ");
 			String username = sc.nextLine();
-			System.out.print("Password(123456): ");
+			System.out.print("Password: ");
 			String password = sc.nextLine();
 			
 			//checking for the usrename matching the password 
 			boolean authentication = userLoginValid(file, username, password);
 			while (!authentication) {
 				System.out.println("Invalid username or password. Please try again");
-				System.out.print("Username(testrun): ");
+				System.out.print("Username: ");
 				username = sc.nextLine();
-				System.out.print("Password(123456): ");
+				System.out.print("Password: ");
 				password = sc.nextLine();
 				authentication = userLoginValid(file, username, password);
 			}
@@ -293,21 +290,22 @@ public class AnitaPahangdarCrazy8 {
                 }
             } while (!username.matches("[a-zA-Z]+"));
 
-            // Input validation loop for password
+            // Input validation loop for a six-character alphanumeric password.
             String password;
             do {
-                System.out.print("Password (6 digits/letters only): ");
+                System.out.print("Password (exactly 6 letters or digits): ");
                 password = sc.nextLine();
-                if (password.length() > 6) {
-                    System.out.println("Invalid input. Password must be 6 digits/numbers.");
+                if (!password.matches("[a-zA-Z0-9]{6}")) {
+                    System.out.println("Invalid input. Password must contain exactly 6 letters or digits.");
                 }
-            } while (password.length() > 6);
+            } while (!password.matches("[a-zA-Z0-9]{6}"));
             
             //adding the username and password to the file
 			PrintWriter filePW = new PrintWriter(new FileWriter(file, true));
 			filePW.println();
             filePW.println(username);
             filePW.println(password);
+            filePW.println(0);
             filePW.close();
             
             System.out.println("Account created successfully!");
@@ -468,22 +466,17 @@ public class AnitaPahangdarCrazy8 {
 		System.out.println("You have total number of " + numWins + " until now!");
 		
 		//asking if they want to play again or not 
-		System.out.println("Do you want to play again?(y/n) ");
-		String playAgain = sc.nextLine();
-		//checking for the user's input validtion
-		while (!playAgain.equals("y") && !playAgain.equals("n")) {
+		sc.nextLine(); // consume the newline left by numeric card input
+		System.out.print("Do you want to play again? (y/n): ");
+		String playAgain = sc.nextLine().trim();
+		while (!playAgain.equalsIgnoreCase("y") && !playAgain.equalsIgnoreCase("n")) {
 			System.out.println("Invalid input. Please try again.");
-			System.out.print("Do you have an acocunt?(y/n) ");
-			if (sc.hasNextInt()) {
-				account = sc.nextLine();
-	        } 
-			else {
-	            sc.next(); //consume the invalid input
-	        }
+			System.out.print("Do you want to play again? (y/n): ");
+			playAgain = sc.nextLine().trim();
 		}
 		
 		//printing instruction
-		if(playAgain.equals("y")) {
+		if(playAgain.equalsIgnoreCase("y")) {
 			System.out.println("You can play again by running the game again!");
 			System.out.println("We will keep track of the times you've won");
 		}
@@ -493,7 +486,6 @@ public class AnitaPahangdarCrazy8 {
 		
 		
 		//closing scanner
-		input.close();
 		sc.close();
 		
 	}

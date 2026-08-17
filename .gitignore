@@ -1,0 +1,20 @@
+# Java build output
+*.class
+out/
+build/
+bin/
+
+# Local account data
+information.txt
+
+# IDE settings
+.idea/
+.vscode/
+.classpath
+.project
+.settings/
+*.iml
+
+# Operating system files
+.DS_Store
+Thumbs.db
