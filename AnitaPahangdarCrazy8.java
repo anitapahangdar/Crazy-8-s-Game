@@ -242,7 +242,7 @@ public class AnitaPahangdarCrazy8 {
 		System.out.println("WELCOME!!");
 		
 		//asking if the user has an account or they have to make an account
-		System.out.print("Do you have an acocunt?(y/n) ");
+		System.out.print("Do you have an account? (y/n): ");
 		String account = sc.nextLine();
 		
 		//Keep prompting until the user enters a supported option.
@@ -256,18 +256,18 @@ public class AnitaPahangdarCrazy8 {
 		if(account.equalsIgnoreCase("y")) {
 			//getting the username and password 
 			System.out.println("↪ Please enter username and password to log into your account ");
-			System.out.print("Username(testrun): ");
+			System.out.print("Username: ");
 			String username = sc.nextLine();
-			System.out.print("Password(123456): ");
+			System.out.print("Password: ");
 			String password = sc.nextLine();
 			
 			//checking for the usrename matching the password 
 			boolean authentication = userLoginValid(file, username, password);
 			while (!authentication) {
 				System.out.println("Invalid username or password. Please try again");
-				System.out.print("Username(testrun): ");
+				System.out.print("Username: ");
 				username = sc.nextLine();
-				System.out.print("Password(123456): ");
+				System.out.print("Password: ");
 				password = sc.nextLine();
 				authentication = userLoginValid(file, username, password);
 			}
